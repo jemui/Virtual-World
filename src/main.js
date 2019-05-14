@@ -1,26 +1,39 @@
 var shader = null;
-var count = 0;
-var timer = 0;
 
-// change to 32x32 later
-// 8 x 8 rn
+// 32x32x4 map
 var map = [
-    [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-    [4, 0, 3, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 4],
-    [4, 0, 2, 2, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 4],
-    [4, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 4],
-    [4, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 4],
-    [4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
-    [4, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 2, 2, 4],
-    [4, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 2, 0, 0, 4],
-    [4, 0, 3, 0, 0, 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 4],
-    [4, 0, 0, 2, 0, 1, 1, 0, 0, 0, 2, 0, 0, 0, 0, 4],
-    [4, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
-    [4, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 4],
-    [4, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 4],
-    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 4],
-    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4], 
-    [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+    [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+    [4, 0, 3, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4],
+    [4, 0, 2, 2, 2, 0, 0, 0, 0, 4, 0, 0, 4, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 3, 0, 2, 2, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 4],
+    [4, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4],
+    [4, 0, 3, 0, 0, 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4],
+    [4, 0, 0, 2, 0, 1, 1, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 0, 4],
+    [4, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4],
+    [4, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4],
+    [4, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 4],
+    [4, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
 ];
 
 function main() {
@@ -48,55 +61,45 @@ function main() {
   shader.addAttribute("a_TexCoord");
 
   // Add uniforms
-  var idMatrix = new Matrix4();
-  var identityMat = new Matrix4();
-
-  shader.addUniform("u_ModelMatrix", "mat4", idMatrix.elements);
-  shader.addUniform("u_ViewMatrix", "mat4", identityMat.elements);
+  shader.addUniform("u_ModelMatrix", "mat4", new Matrix4().elements);
+  shader.addUniform("u_ViewMatrix", "mat4", new Matrix4().elements);
   shader.addUniform("u_ProjectionMatrix", "mat4", new Matrix4().elements);
   shader.addUniform("u_Sampler", "sampler2D", 0);
 
-  inputHandler.readTexture("objs/sky.jpg", function(image) {//sky.jpg
-      var shape = new Cube(shader, 0, 0, image, 16);
+  // Creates the skybox
+  inputHandler.readTexture("objs/sky.png", function(image) {
+      var shape = new Cube(shader, 0, 0, image, 32);
       scene.addGeometry(shape);
   })
 
-
+  // Creates the ground
   inputHandler.readTexture("objs/grass3.png", function(image) {
-      // for loop to create plane later, or scale it
       var shape;
 
-  // 16 x 16 rn
-      for(var i = -8; i < 9; i+= 1) {
-        for(var j = 0; j < 17; j += 1) {
-          //shape = new Square(shader, -0.5, -0.5, image);
+      // Creates the plane out of squares
+      for(var i = -8; i < 25/2; i+= 1) {
+        for(var j = 0; j < 33/2; j += 1) {
           shape = new Square(shader, i, j, image);
           scene.addGeometry(shape);
         }
       }
-     // shape = new Square(shader, 0.5, 0, image);
-       // scene.addGeometry(shape);
   })
-
-
+ 
+  // Creates the walls based on the values 0-4 in map array
   inputHandler.readTexture("objs/dirt.jpg", function(image) {
-      
       var shape;
-      console.log("map len ", map.length);
 
       // position for x val will be updated per j val 
       var posX = -8;
       var posZ = 0; 
       var size = 0.5;
 
-      // row and col will be the same length
+      // Creates the 32x32x4 world based on the 2D array map
       for(var i = 0; i < map.length; i++) {
-        //  console.log("i ", i);
           for(var j = 0; j < map.length; j++) {
-         //   console.log("j ", j);
-          //  console.log(map[i][j]);
               posX += size*2;
-              console.log(posZ);
+
+              // Draws walls based on height
               if(map[i][j] == 1) {
                   shape = new Cube(shader, posX, posZ, image, size);
                   scene.addGeometry(shape);
@@ -133,6 +136,7 @@ function main() {
               }
 
           }
+
           // reset positon x and move along z
           posX = -8;
           posZ += size*2;
@@ -143,16 +147,4 @@ function main() {
   // Initialize renderer with scene and camera
   renderer = new Renderer(gl, scene, camera);
   renderer.start();
-
-  // Update global counter for fluctuating triangles and moving circles
-  var tick = function() {
-    count++;
-    timer++;
-
-    if(count == 30) 
-      count = 0;
-
-    requestAnimationFrame(tick);
-  }
-  tick();
 }

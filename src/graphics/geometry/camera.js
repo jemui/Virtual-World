@@ -16,8 +16,8 @@ class Camera {
         this.ortho = false;
 
         // Camera view attributes
-        this.eye     = new Vector3([0, 1, 15]);  //origin   //change mid valus to avoid clip
-        this.center  = new Vector3([0,  1, -1]); //look at
+        this.eye     = new Vector3([0, 2, 15]);  // origin   
+        this.center  = new Vector3([0,  1, -1]); // look at
         this.up      = new Vector3([0,  1, 0]);
 
         this.viewMatrix = new Matrix4();
@@ -27,13 +27,9 @@ class Camera {
 
         // Specify the viewing volume
         this.projectionMatrix.setPerspective(90, 1, 1, 100);
-        //this.projectionMatrix.setOrtho(-1.0, 1.0, -1.0, 1.0, 0, 100);
     }
 
-    rotate() {
-
-    }
-
+    // Moves the camera left and right
     truck(dir) {
         // Calculate the n camera axis
         var n = this.eye.sub(this.center);
@@ -48,7 +44,7 @@ class Camera {
 
         // Add the direction vector to both the eye and center positions
         this.eye = this.eye.add(u);
-        this.center = this.center.add(u); // change to up for rotate
+        this.center = this.center.add(u); 
 
         this.updateView();
     }
@@ -60,6 +56,7 @@ class Camera {
         this.updateView();
     }
 
+    // Tilt the camera vertically
     tilt(dir) {
         this.center.elements[1] =  this.center.elements[1]-dir;
         this.updateView();
@@ -71,23 +68,26 @@ class Camera {
         this.eye.elements[2] =  this.eye.elements[2]+dir;
         this.updateView();
     }
+
+    // Zoom in/out based on mouse scroll
     zoom(amt) {
         this.eye.elements[2] =  this.eye.elements[2]+amt;
         this.updateView();
     }
 
+    // Set the perspective camera when z is pressed
     setPersp() {
-      // this.viewMatrix.setLookAt(0, 0, 5, 0, 0, -100, 0, 1, 0);
        this.projectionMatrix.setPerspective(90, 1, 1, 100);
        this.ortho = false;
     }
 
+    // Set the orthogonal camera when z is pressed
     setOrthogonal() {
-      // this.viewMatrix.setLookAt(this.eye.elements[0], this.eye.elements[1], this.eye.elements[2],0, 0, 0, 0, 1, 0);
        this.projectionMatrix.setOrtho(-1.0, 1.0, -1.0, 1.0, 0.0, 100);
        this.ortho = true;
     }
 
+    // Check if the camera is currently perspective or orthogonal
     getOrtho() {
         return this.ortho;
     }

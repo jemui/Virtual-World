@@ -23,15 +23,11 @@ class InputHandler {
       _inputHandler = this;
 
       // Mouse Events
-      this.canvas.onmousedown = function(ev) { _inputHandler.mouseClick(ev) };
       this.canvas.onmousemove = function(ev) { _inputHandler.mouseMove(ev) };
-     // this.canvas.onmousedown = function(ev) { _inputHandler.click(ev) };
-    //  this.canvas.onmousemove = function(ev) { _inputHandler.move(ev) };
       this.canvas.onmouseup = function(ev) { _inputHandler.release(ev) };
-     // this.canvas.onmousewheel = function(ev) { _inputHandler.zoom(ev) };
 
       // browsers except firefox
-     // document.addEventListener('mousewheel', function(ev) { _inputHandler.zoom(ev); }, false);
+      // document.addEventListener('mousewheel', function(ev) { _inputHandler.zoom(ev); }, false);
 
       // firefox
       document.addEventListener('DOMMouseScroll', function(ev) { _inputHandler.zoom(ev); }, false);
@@ -41,13 +37,16 @@ class InputHandler {
       document.addEventListener('keyup',   function(ev) { _inputHandler.keyUp(ev);   }, false);
 
       // Button Events
-      document.getElementById('fileLoad').onclick = function() { _inputHandler.readSelectedFile() };
+      //document.getElementById('fileLoad').onclick = function() { _inputHandler.readSelectedFile() };
 
       // Texture Events
-      document.getElementById('texInput').onchange = function() { _inputHandler.readTexture()};
+     // document.getElementById('texInput').onchange = function() { _inputHandler.readTexture()};
 
     }
 
+    /**
+     * Function called upon scrolling the mouse wheel
+     */
     zoom(ev) {
         var e = window.event;
         var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
@@ -58,46 +57,26 @@ class InputHandler {
         } else {
             this.camera.zoom(0.3);
         }
-
-        console.log("delta ", delta);
     }
 
     /**
-     * Function called upon mouse click.
+     * Function called upon mouse move to pan and tilt camera.
      */
-    mouseClick(ev) {
-        // Print x,y coordinates.
-        console.log(ev.clientX, ev.clientY);
-
-        var shape = new Triangle(shader);
-        this.scene.addGeometry(shape);
-    }
-
     mouseMove(ev) {
         var movementX = ev.movementX;
-       // console.log("movementX", movementX, ev.clientX);
-
         var movementY = ev.movementY;
-        //console.log("movementY", movementY, ev.clientY );
 
-        // might have to adjust input based on x pos 
-
-        // These work
-        // tilt + pan to move camera with mouse 
-        // panning left/right
+        // Panning left/right
         if(ev.clientX <= 200)
-            this.camera.pan(0.1);
+            this.camera.pan(1);
         else if(ev.clientX > 200)
-            this.camera.pan(-0.1);
+            this.camera.pan(-1);
 
-        //looking up
+        // Tilt
         if(ev.clientY <= 200 )
-           this.camera.tilt(-0.1);
+           this.camera.tilt(-1);
         else
-           this.camera.tilt(0.1);
-
-
-        // console.log( this.camera.getEye());
+           this.camera.tilt(1);
     }
 
     keyUp(ev) {
@@ -143,27 +122,6 @@ class InputHandler {
         this.scene.addGeometry(shape);
     }
 
-    /**
-     * Function called to read a selected file.
-     */
-    readSelectedFile() {
-        var fileReader = new FileReader();
-        var objFile = document.getElementById("fileInput").files[0];
-
-        if (!objFile) {
-            alert("OBJ file not set!");
-            return;
-        }
-
-        fileReader.readAsText(objFile);
-        fileReader.onloadend = function() {
-            var customObj = new CustomOBJ(shader, fileReader.result, _inputHandler.image);
-            _inputHandler.scene.addGeometry(customObj);
-
-            loadedTexture = 1;
-            console.log(customObj);
-        }
-    }
 
     readTexture(src, onTexLoad) {
         // Create the image object

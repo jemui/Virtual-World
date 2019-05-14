@@ -49,13 +49,6 @@ class Cube extends Geometry {
           this.vertices[i+4].texCoord = [1.0, 0.0];
           this.vertices[i+5].texCoord = [1.0, 1.0];
       }
-//  this.translationMatrix = new Matrix4();
-//        // Translate object back for proper rotation
-//        this.translationMatrix.setTranslate(-1, 0, -5);
-//        this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
-//        this.modelMatrix = this.modelMatrix.multiply(this.translationMatrix);  
-
-//        this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements)
 
       // CALL THIS AT THE END OF ANY SHAPE CONSTRUCTOR
       this.interleaveVertices();
@@ -64,16 +57,10 @@ class Cube extends Geometry {
   generateCubeVertices(size, height) {
       var vertices = []
 
-      // avoid clipping by dividing by a number greater than size
-      //var size = document.getElementById("size").value/10;
-    //  var size = this.size;
-      // convert to gl coordinates
-      // adding the same value to all of them (x and z) stretches cube
-      var x = this.x;//(this.x/canvas.width)*2-1;
-      var y = height+0.21; //this is height  //this.y-size;//(this.y/canvas.height)*-2+1;
-      var z = this.y; // new "y." Affects position but cant change :/
+      var x = this.x;
+      var y = height+0.21; 
+      var z = this.y;
 
-      console.log(x + " " + y + " " + size);
       // front face
       var vertex1 = new Vertex( x+size, y+size, z+size);  // v0 
       var vertex2 = new Vertex( x-size, y+size, z+size); // v1

@@ -1,7 +1,7 @@
 <html lang="en">
   <head>
       <meta charset="utf-8"/>
-      <title> CMPS160 Asg 3 </title>
+      <title> CMPS160 Asg 4 </title>
 
       <!-- Include Base code libs -->
       <script src = "src/main.js"></script>
@@ -11,8 +11,6 @@
       <script src = "src/graphics/geometry/geometry.js"></script>
       <script src = "src/graphics/geometry/camera.js"></script>
       <script src = "src/graphics/geometry/vertex.js"></script>
-      <script src = "src/graphics/geometry/shapes/triangle.js"></script>
-      <script src = "src/graphics/geometry/shapes/circle.js"></script>
       <script src = "src/graphics/geometry/shapes/square.js"></script>
       <script src = "src/graphics/geometry/shapes/cube.js"></script>
       <script src = "src/graphics/geometry/shapes/custom.js"></script>
@@ -35,36 +33,7 @@
       Please use a browser that supports "canvas"
     </canvas>
       <p>
-        <button id="clear">Clear Canvas</button> 
-        
-        <br><br>
-        Set OBJ: <input type="file" id="fileInput"/>
-        Set Texture Image: <input type="file" id="texInput"/>
-        
-        <button type="button" id="fileLoad">Add Geometry to Scene</button>
-        
-        <br><br>
         <p id="canvas"></p> 
-
-        Drawing Mode: <br>
-        <button id="square">Spinning Squares</button><p hidden id="sqr">true</p>
-        <button id="triangle">Triangles</button><p hidden id="tri"></p>
-        <button id="circle">Randomly Movng Circles</button><p hidden id="cir"></p>
-        <button id="tilted">Tilted Cube</button> <br><p hidden id="cube"></p> <br>
-
-        <br>  Shape Color:   <br>
-        <div class="slidecontainer"> <input type="button" id="changeColor" value = "Solid Color 😞"></input>
-          Red: <input type="range" min="0" max="255" value="255" class="slider" id="red">
-          Green: <input type="range" min="0" max="255" value="0" class="slider" id="green">
-          Blue: <input type="range" min="0" max="255" value="0" class="slider" id="blue">      
-        </div> 
-
-        <br>   
-          <div class="slidecontainer">Shape Size: 
-            <input type="range" min="1" max="7" value="3" class="slider" id="size">
-            (Circles) Segment Count: <input type="range" min="4" max="32" value="32" class="slider" id="segment">    
-          </div> 
-
       </p>
   </body>
 </html>

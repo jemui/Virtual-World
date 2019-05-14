@@ -36,41 +36,19 @@ class Square extends Geometry {
       var vertices = []
 
       // convert to gl coordinates
-      var x = this.x;//(this.x/canvas.width)*2-1;
-      var y = this.y;//(this.y/canvas.height)*-2+1;
+      var x = this.x;
+      var y = this.y;
       var z = 0.0;
-//console.log("square : " + x);
-      //var size = document.getElementById("size").value/10;
+
       var size = 0.5;
 
-      // Vertices
-    //   var vertex1 = new Vertex(x,  y, x);
-    //   var vertex2 = new Vertex(-x, y, x);
-    //   var vertex3 = new Vertex(-x, y, -x);
-    //   var vertex4 = new Vertex(-x, y, -x);
-    //   var vertex5 = new Vertex(x,  y, -x);
-    //   var vertex6 = new Vertex(x,  y, x);
-
+      // Generate vertices on the xz axes
       var vertex1 = new Vertex(x+size,  0, y+size);
       var vertex2 = new Vertex(x-size,  0, y+size);
       var vertex3 = new Vertex(x-size,  0, y-size);
       var vertex4 = new Vertex(x-size,  0, y-size);
       var vertex5 = new Vertex(x+size,  0, y-size);
       var vertex6 = new Vertex(x+size,  0, y+size);
-
-      // var vertex1 = new Vertex(x+size,  0, x+size);
-      // var vertex2 = new Vertex(x-size,  0, x+size);
-      // var vertex3 = new Vertex(x-size,  0, x-size);
-      // var vertex4 = new Vertex(x-size,  0, x-size);
-      // var vertex5 = new Vertex(x+size,  0, x-size);
-      // var vertex6 = new Vertex(x+size,  0, x+size);
-
-      // var vertex1 = new Vertex(x, x, z);
-      // var vertex2 = new Vertex(-x, x, z);
-      // var vertex3 = new Vertex(-x, -x, z);
-      // var vertex4 = new Vertex(-x, -x, z);
-      // var vertex5 = new Vertex(x, -x, z);
-      // var vertex6 = new Vertex(x, x, z);
 
       vertices.push(vertex1);
       vertices.push(vertex2);
@@ -80,29 +58,5 @@ class Square extends Geometry {
       vertices.push(vertex6);
 
       return vertices;
-  }
-
-  // Rotates the square every frame
-  render() {
-    // // Object's gl coordinates
-    // var x = (this.x/canvas.width)*2-1;
-    // var y = (this.y/canvas.height)*-2+1;
-
-    // // Translate origin to center of the object and update matrix
-    // this.translationMatrix = new Matrix4();
-    // this.translationMatrix.setTranslate(x, y, 0);
-    // this.modelMatrix = this.modelMatrix.multiply(this.translationMatrix);
-
-    // // Rotate the matrix around object's center
-    // this.rotationMatrix = new Matrix4();
-    // this.rotationMatrix.setRotate(-0.5, 0, 0, 1);
-    // this.modelMatrix = this.modelMatrix.multiply(this.rotationMatrix);
-
-    // // Translate object back for proper rotation
-    // this.translationMatrix.setTranslate(-x, -y, 0);
-    // this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
-    // this.modelMatrix = this.modelMatrix.multiply(this.translationMatrix);  
-
-     //this.shader.setUniform("u_ModelMatrix", this.modelMatrix.elements);
   }
 }
