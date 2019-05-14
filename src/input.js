@@ -54,9 +54,9 @@ class InputHandler {
       
         if(delta == 1) 
         {
-            this.camera.zoom(0.3);
-        } else {
             this.camera.zoom(-0.3);
+        } else {
+            this.camera.zoom(0.3);
         }
 
         console.log("delta ", delta);
@@ -85,16 +85,16 @@ class InputHandler {
         // These work
         // tilt + pan to move camera with mouse 
         // panning left/right
-        // if(ev.clientX <= 200)
-        //     this.camera.pan(-0.1);
-        // else if(ev.clientX > 200)
-        //     this.camera.pan(0.1);
+        if(ev.clientX <= 200)
+            this.camera.pan(0.1);
+        else if(ev.clientX > 200)
+            this.camera.pan(-0.1);
 
-        // //looking up
-        // if(ev.clientY <= 200 )
-        //    this.camera.tilt(-0.1);
-        // else
-        //    this.camera.tilt(0.1);
+        //looking up
+        if(ev.clientY <= 200 )
+           this.camera.tilt(-0.1);
+        else
+           this.camera.tilt(0.1);
 
 
         // console.log( this.camera.getEye());
@@ -117,10 +117,18 @@ class InputHandler {
             this.camera.truck(1);
         }
         else if(keyName == "w") {
-            this.camera.dolly(0.1);
+            this.camera.dolly(-0.1);
         }
         else if(keyName == "s") {
-            this.camera.dolly(-0.1);
+            this.camera.dolly(0.1);
+        }
+
+        // switch between perspective and ortho view
+        if(keyName == "z") {
+            if(this.camera.getOrtho() == false)
+                this.camera.setOrthogonal();
+            else 
+                this.camera.setPersp();
         }
     }
 

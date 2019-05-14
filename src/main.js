@@ -5,14 +5,22 @@ var timer = 0;
 // change to 32x32 later
 // 8 x 8 rn
 var map = [
-    [3, 2, 2, 1, 3, 2, 2, 1],
-    [1, 0, 1, 0, 1, 0, 1, 0],
-    [0, 3, 0, 0, 0, 0, 0, 0],
-    [0, 0, 2, 0, 0, 0, 0, 0],
-    [0, 0, 0, 2, 0, 0, 0, 0],
-    [0, 0, 0, 0, 2, 0, 0, 0],
-    [0, 2, 2, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
+    [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
+    [4, 0, 3, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 4],
+    [4, 0, 2, 2, 2, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 4],
+    [4, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 4],
+    [4, 0, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 2, 2, 4],
+    [4, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 2, 0, 0, 4],
+    [4, 0, 3, 0, 0, 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 2, 0, 1, 1, 0, 0, 0, 2, 0, 0, 0, 0, 4],
+    [4, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 4],
+    [4, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 4],
+    [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4], 
+    [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
 ];
 
 function main() {
@@ -48,25 +56,19 @@ function main() {
   shader.addUniform("u_ProjectionMatrix", "mat4", new Matrix4().elements);
   shader.addUniform("u_Sampler", "sampler2D", 0);
 
-  inputHandler.readTexture("objs/sky.jpg", function(image) {
-      var shape = new Cube(shader, 0, 0, image, 5);
+  inputHandler.readTexture("objs/sky.jpg", function(image) {//sky.jpg
+      var shape = new Cube(shader, 0, 0, image, 16);
       scene.addGeometry(shape);
   })
 
 
-  inputHandler.readTexture("objs/grass2.png", function(image) {
+  inputHandler.readTexture("objs/grass3.png", function(image) {
       // for loop to create plane later, or scale it
       var shape;
-     // shape = new Square(shader, -0.5, -0.5, image);
-     // scene.addGeometry(shape);
-     
-     // size is x (0.5). change to 16 later to make it 32 by 32
 
-// shape = new Square(shader, -0.5, -0.5, image);
-//           scene.addGeometry(shape);
-
-      for(var i = -3; i < 3; i+= 1) {
-        for(var j = -3; j < 3; j += 1) {
+  // 16 x 16 rn
+      for(var i = -8; i < 9; i+= 1) {
+        for(var j = 0; j < 17; j += 1) {
           //shape = new Square(shader, -0.5, -0.5, image);
           shape = new Square(shader, i, j, image);
           scene.addGeometry(shape);
@@ -81,81 +83,66 @@ function main() {
       
       var shape;
       console.log("map len ", map.length);
+
       // position for x val will be updated per j val 
-      var posX = -5;
-      var posY = -5;  // posZ
-      
+      var posX = -8;
+      var posZ = 0; 
+      var size = 0.5;
+
       // row and col will be the same length
       for(var i = 0; i < map.length; i++) {
         //  console.log("i ", i);
           for(var j = 0; j < map.length; j++) {
          //   console.log("j ", j);
           //  console.log(map[i][j]);
-              posX+=0.3;
+              posX += size*2;
+              console.log(posZ);
               if(map[i][j] == 1) {
-                  shape = new Cube(shader, posX, posY, image, 0.2);
+                  shape = new Cube(shader, posX, posZ, image, size);
                   scene.addGeometry(shape);
               } 
               else if(map[i][j] == 2) {
-                  shape = new Cube(shader, posX, posY, image, 0.2);
+                  shape = new Cube(shader, posX, posZ, image, size);
                   scene.addGeometry(shape);
                   
-                  shape = new Cube(shader, posX, posY, image, 0.2, 2);
+                  shape = new Cube(shader, posX, posZ, image, size, 2);
                   scene.addGeometry(shape);
               }
               else if(map[i][j] == 3) {
-                  shape = new Cube(shader, posX, posY, image, 0.2);
+                  shape = new Cube(shader, posX, posZ, image, size);
                   scene.addGeometry(shape);
                   
-                  shape = new Cube(shader, posX, posY, image, 0.2, 2);
+                  shape = new Cube(shader, posX, posZ, image, size, 2);
                   scene.addGeometry(shape);
 
-                  shape = new Cube(shader, posX, posY, image, 0.2, 3);
+                  shape = new Cube(shader, posX, posZ, image, size, 3);
                   scene.addGeometry(shape);
               }
               else if(map[i][j] == 4) {
-                  shape = new Cube(shader, posX, posY, image, 0.2);
+                  shape = new Cube(shader, posX, posZ, image, size);
                   scene.addGeometry(shape);
                   
-                  shape = new Cube(shader, posX, posY, image, 0.2, 2);
+                  shape = new Cube(shader, posX, posZ, image, size, 2);
                   scene.addGeometry(shape);
 
-                  shape = new Cube(shader, posX, posY, image, 0.2, 3);
+                  shape = new Cube(shader, posX, posZ, image, size, 3);
                   scene.addGeometry(shape);
 
-                  shape = new Cube(shader, posX, posY, image, 0.2, 4);
+                  shape = new Cube(shader, posX, posZ, image, size, 4);
                   scene.addGeometry(shape);
               }
 
           }
-          posY+=0.3;
+          // reset positon x and move along z
+          posX = -8;
+          posZ += size*2;
       }
 
-      // shape = new Cube(shader, 0, 0, image, 0.2);
-      // scene.addGeometry(shape);
   })
-
-
-
 
   // Initialize renderer with scene and camera
   renderer = new Renderer(gl, scene, camera);
   renderer.start();
-
-  
-
-
-
-
-  // Load the initial textured cube
-  // var image = new Image();
-  // image.src = 'objs/sky.jpg';
-
-  // // Add the cube into the scene once the image is loaded
-  // image.onload = function() {
-  //   var shape = new Cube(shader, 130, 200, image, 1);
-  //   scene.addGeometry(shape);
-  // }
 
   // Update global counter for fluctuating triangles and moving circles
   var tick = function() {
